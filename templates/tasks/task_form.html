@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>{{ form.instance.pk|yesno:"Edit,Create" }} Task</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">{{ form.instance.pk|yesno:"Update,Create" }} Task</button>
+  </form>
+  <a href="{% url 'task_list' %}">Back to task list</a>
+{% endblock %}
