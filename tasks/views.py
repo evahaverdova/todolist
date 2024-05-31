@@ -1,4 +1,5 @@
 # tasks/views.py
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Task
@@ -6,7 +7,7 @@ from .forms import TaskForm
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(user=request.user).order_by('start_time')
     return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
 @login_required
