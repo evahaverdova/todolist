@@ -1,16 +1,12 @@
-# tasks/models.py
-
 from django.db import models
-from django.utils import timezone
 from django.conf import settings
 
 class Task(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField()
     completed = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(null=True, blank=True)  # Aktualizujte názov poľa
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    start_time = models.DateTimeField(default=timezone.now)  # Nové pole
 
     def __str__(self):
         return self.title

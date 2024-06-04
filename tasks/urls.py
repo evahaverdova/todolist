@@ -1,10 +1,9 @@
-# tasks/urls.py
 from django.urls import path
-from .views import task_list, create_task, update_task, delete_task
+from .views import task_list, task_create, task_complete, task_edit  # Upravený import
 
 urlpatterns = [
     path('', task_list, name='task_list'),
-    path('create/', create_task, name='task_create'),
-    path('edit/<int:pk>/', update_task, name='task_edit'),
-    path('delete/<int:pk>/', delete_task, name='task_delete'),
+    path('create/', task_create, name='task_create'),
+    path('complete/<int:task_id>/', task_complete, name='task_complete'),  # Upravená URL cesta pre označenie úlohy ako splnená
+    path('edit/<int:task_id>/', task_edit, name='task_edit'),
 ]

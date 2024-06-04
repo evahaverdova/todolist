@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from .managers import CustomUserManager  # Import vášho vlastného manažéra
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -8,3 +8,5 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    objects = CustomUserManager()  # Pridanie vlastného manažéra
