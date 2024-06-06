@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.filter(user=request.user)
+    tasks = Task.objects.filter(user=request.user).order_by('start_time')
     return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
 @login_required
@@ -43,6 +43,13 @@ def task_edit(request, task_id):
     else:
         form = TaskForm(instance=task)
     return render(request, 'tasks/task_form.html', {'form': form, 'task': task})
+
+@login_required
+def task_delete(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+    return redirect('task_list')
 
 def index(request):
     return render(request, 'index.html')

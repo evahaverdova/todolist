@@ -1,6 +1,69 @@
-{% extends 'base_generic.html' %}
-
-{% block content %}
-<h1>Welcome to the Todo list App</h1>
-<p>Manage your tasks efficiently.</p>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Todo List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .header {
+            background-color: #007CB5;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        .content p {
+            font-size: 18px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007CB5;
+            border-radius: 5px;
+        }
+        .buttons a:hover {
+            background-color: #005f87;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to the Todo list App</h1>
+        </div>
+        <div class="content">
+            <p>Manage your tasks efficiently.</p>
+        </div>
+        <div class="buttons">
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </div>
+    </div>
+</body>
+</html>

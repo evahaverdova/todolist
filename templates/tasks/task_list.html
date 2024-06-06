@@ -1,49 +1,107 @@
 {% extends 'base_generic.html' %}
+{% load static %}
 
 {% block content %}
 <style>
+    body {
+        background-color: #f2f2f2; /* Sivé pozadie stránky */
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .task-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
     .task-item {
-        border: 2px solid #cccccc;
-        background-color: #f2f2f2;
-        padding: 10px;
+        border: 2px solid #007cb5;
+        background-color: #ffffff; /* Biele pozadie pre úlohy */
+        padding: 5px 10px;
         margin-bottom: 10px;
-        border-radius: 10px;
-        list-style-type: none;
+        border-radius: 5px;
+        width: 48%;
+        box-sizing: border-box;
+        color: #007cb5; /* Modrý text */
     }
     .task-title {
         font-size: 18px;
-        color: #007CB5;
+        color: #3bbc01;
         font-weight: bold;
+        line-height: 0.2;
     }
     .task-description {
-        color: #333333;
+        color: #5e5e5e;
+        font-weight: bold;
+        line-height: 0.5;
+
     }
-    .start-time {
-        color: #666666;
+    .due-date {
+        font-size: 13px;
+        color: #007cb5;
+        line-height: 0.1;
     }
     .task-actions {
-        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px; /* Pridáme medzeru medzi tlačidlami */
+        margin-top: 10px;
+    }
+    .task-actions button, .task-actions a {
+        background-color: #007cb5;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+    }
+    .task-actions .delete-button {
+        background: none;
+        border: none;
+        color: #ff4d4d; /* Červená farba pre delete */
+        font-size: 24px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .create-task {
+        background-color: #007cb5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
     }
 </style>
 
-<h2 style="color: #007CB5;">Task List</h2>
-<ul>
-    {% for task in tasks %}
-        <div class="task-item">
-            <li>
+<div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px;">
+    <div class="header">
+        <h2 style="color: #007cb5; font-size: 40px;">Task List</h2>
+        <a href="{% url 'task_create' %}" class="create-task">Create new task</a>
+    </div>
+    <div class="task-list">
+        {% for task in tasks %}
+            <div class="task-item">
                 <p class="task-title">{{ task.title }}</p>
                 <p class="task-description">{{ task.description }}</p>
                 {% if task.start_time %}
-                    <p class="start-time"><strong>Start time:</strong> {{ task.start_time }}</p>
+                    <p class="due-date"><strong>Start time:</strong> {{ task.start_time }}</p>
                 {% endif %}
-                <form method="post" action="{% url 'task_complete' task.id %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background-color: #007CB5; color: white;">Complete</button>
-                </form>
-                <a href="{% url 'task_edit' task.id %}" style="margin-left: 10px; color: #007CB5;">Edit</a>
-            </li>
-        </div>
-    {% endfor %}
-</ul>
-<a href="{% url 'task_create' %}" style="color: #007CB5;">Create new task</a>
+                <div class="task-actions">
+                    <form method="post" action="{% url 'task_complete' task.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Complete</button>
+                    </form>
+                    <a href="{% url 'task_edit' task.id %}">Edit</a>
+                    <form method="post" action="{% url 'task_delete' task.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">&#128465;</button> <!-- Unicode symbol for trash can -->
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

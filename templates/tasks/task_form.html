@@ -1,10 +1,29 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-<h2>{{ form.instance.pk|yesno:"Edit Task,Create Task" }}</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+<div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 2px solid #007CB5; border-radius: 10px; background-color: #f9f9f9;">
+    <h2 style="color: #007CB5; text-align: center;">{{ form.instance.pk|yesno:"Edit Task,Create Task" }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 10px;">
+            {{ form.title.label_tag }}<br>
+            {{ form.title }}
+        </div>
+        <div style="margin-bottom: 10px;">
+            {{ form.description.label_tag }}<br>
+            {{ form.description }}
+        </div>
+        <div style="margin-bottom: 10px;">
+            {{ form.start_time.label_tag }}<br>
+            {{ form.start_time }}
+        </div>
+        <div style="margin-bottom: 10px;">
+            {{ form.completed.label_tag }}<br>
+            {{ form.completed }}
+        </div>
+        <div style="text-align: center;">
+            <button type="submit" class="button" style="background-color: #007CB5; color: white; padding: 10px 20px; border: none; border-radius: 4px;">Save</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
