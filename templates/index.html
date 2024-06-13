@@ -4,66 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome | Todo List App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script>
+        function showOptions() {
+            document.getElementById('try-for-free').style.display = 'none';
+            document.getElementById('options').style.display = 'flex';
+            document.getElementById('welcome-image').src = "{% static 'images/header.png' %}";
         }
-        .container {
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-        }
-        .header {
-            background-color: #007CB5;
-            color: white;
-            padding: 20px;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 36px;
-        }
-        .content p {
-            font-size: 18px;
-            color: #333333;
-            margin-bottom: 20px;
-        }
-        .buttons a {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 18px;
-            margin: 10px;
-            text-decoration: none;
-            color: white;
-            background-color: #007CB5;
-            border-radius: 5px;
-        }
-        .buttons a:hover {
-            background-color: #005f87;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to the Todo list App</h1>
+    <header>
+        <div class="header-left">
+            <img src="{% static 'images/icon.png' %}" alt="Logo" id="logo">
+            <h1>Todo List App</h1>
         </div>
-        <div class="content">
-            <p>Manage your tasks efficiently.</p>
-        </div>
-        <div class="buttons">
+        <nav>
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'signup' %}">Sign Up</a>
+        </nav>
+    </header>
+    <main>
+        <div class="welcome-container">
+            <div class="welcome-text">
+                <h1>Welcome to Todo list App</h1>
+                <p>Todo list app helps you organize your tasks efficiently</p>
+                <div class="buttons" id="try-for-free">
+                    <button onclick="showOptions()">Try for free</button>
+                </div>
+                <div id="options" style="display: none;">
+                    <div id="button-container">
+                        <button onclick="window.location.href='{% url 'login' %}'">Login</button>
+                        <button onclick="window.location.href='{% url 'signup' %}'">Sign Up</button>
+                    </div>
+                    <h2>Please choice an option for using the application</h2>
+                </div>
+            </div>
+            <div class="welcome-image">
+                <img id="welcome-image" src="{% static 'images/welcome.png' %}" alt="Welcome Image">
+            </div>
         </div>
-    </div>
+    </main>
+    <footer>
+        <p>Todo List App</p>
+        <nav>
+            <p>Made by - Eva Haverdova</p>
+        </nav>
+    </footer>
 </body>
 </html>

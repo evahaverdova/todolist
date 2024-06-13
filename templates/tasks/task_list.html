@@ -2,88 +2,38 @@
 {% load static %}
 
 {% block content %}
-<style>
-    body {
-        background-color: #f2f2f2; /* Sivé pozadie stránky */
-    }
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .task-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-    .task-item {
-        border: 2px solid #007cb5;
-        background-color: #ffffff; /* Biele pozadie pre úlohy */
-        padding: 5px 10px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        width: 48%;
-        box-sizing: border-box;
-        color: #007cb5; /* Modrý text */
-    }
-    .task-title {
-        font-size: 18px;
-        color: #3bbc01;
-        font-weight: bold;
-        line-height: 0.2;
-    }
-    .task-description {
-        color: #5e5e5e;
-        font-weight: bold;
-        line-height: 0.5;
-
-    }
-    .due-date {
-        font-size: 13px;
-        color: #007cb5;
-        line-height: 0.1;
-    }
-    .task-actions {
-        display: flex;
-        align-items: center;
-        gap: 5px; /* Pridáme medzeru medzi tlačidlami */
-        margin-top: 10px;
-    }
-    .task-actions button, .task-actions a {
-        background-color: #007cb5;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-    }
-    .task-actions .delete-button {
-        background: none;
-        border: none;
-        color: #ff4d4d; /* Červená farba pre delete */
-        font-size: 24px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    .create-task {
-        background-color: #007cb5;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 4px;
-        text-decoration: none;
-    }
-</style>
-
-<div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px;">
+<div class="task-container">
     <div class="header">
-        <h2 style="color: #007cb5; font-size: 40px;">Task List</h2>
-        <a href="{% url 'task_create' %}" class="create-task">Create new task</a>
+        <div class="task-header-actions">
+            <h2 class="task-header">Task List</h2>
+            <div id="task-filters" class="task-filters">
+                <div class="filter-wrapper">
+                    <button onclick="window.location.href='?filter=all'" class="filter-button {% if current_filter == 'all' %}active{% endif %}">All</button>
+                </div>
+                {% for filter in available_statuses %}
+                    {% if filter != 'all' %}
+                        <div class="filter-wrapper">
+                            <button onclick="window.location.href='?filter={{ filter }}'" class="filter-button {% if current_filter == filter %}active{% endif %}">{{ filter }}</button>
+                            <span class="delete-filter" onclick="deleteFilter('{{ filter }}')">✖</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="filter-wrapper new-filter-wrapper">
+                    <button id="new-filter-button" onclick="toggleNewFilterForm()" class="filter-button new-filter-button">New</button>
+                </div>
+            </div>
+            <a href="{% url 'task_create' %}?filter={{ current_filter }}" class="create-task">Create new task</a>
+        </div>
     </div>
+
+    <div id="new-filter-form" class="new-filter-form" style="display: none;">
+        <input type="text" id="new-filter-name" placeholder="Enter filter name" class="new-filter-input" maxlength="15">
+        <button id="add-filter-button" class="add-filter-button">Add Filter</button>
+    </div>
+
     <div class="task-list">
         {% for task in tasks %}
-            <div class="task-item">
+            <div class="task-item" data-status="{{ task.status.all|join:', ' }}">
                 <p class="task-title">{{ task.title }}</p>
                 <p class="task-description">{{ task.description }}</p>
                 {% if task.start_time %}
@@ -92,16 +42,63 @@
                 <div class="task-actions">
                     <form method="post" action="{% url 'task_complete' task.id %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit">Complete</button>
+                        <button type="submit" class="complete-button">Complete</button>
                     </form>
-                    <a href="{% url 'task_edit' task.id %}">Edit</a>
+                    <a href="{% url 'task_edit' task.id %}" class="edit-button">Edit</a>
                     <form method="post" action="{% url 'task_delete' task.id %}" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" class="delete-button">&#128465;</button> <!-- Unicode symbol for trash can -->
+                        <button type="submit" class="delete-button">&#128465;</button>
                     </form>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
+
+<div id="alert-box" class="alert-box hidden">Maximum number of filters reached.</div>
+
+<script>
+    function toggleNewFilterForm() {
+        const form = document.getElementById('new-filter-form');
+        form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function deleteFilter(filterName) {
+        fetch(`/tasks/delete_filter/?name=${filterName}`, { method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}})
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+        });
+    }
+
+    document.getElementById('add-filter-button').addEventListener('click', function() {
+        const filterName = document.getElementById('new-filter-name').value;
+        if (filterName && filterName.length <= 15) {
+            fetch('/tasks/add_filter/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ name: filterName })
+            }).then(response => response.json()).then(data => {
+                if (data.status === 'ok') {
+                    window.location.reload();
+                } else {
+                    showAlert('Failed to add filter.');
+                }
+            });
+        }
+    });
+
+    function showAlert(message) {
+        const alertBox = document.getElementById('alert-box');
+        alertBox.innerText = message;
+        alertBox.classList.remove('hidden');
+        setTimeout(() => {
+            alertBox.classList.add('hidden');
+        }, 3000);
+    }
+</script>
 {% endblock %}

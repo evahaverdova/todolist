@@ -1,13 +1,27 @@
 {% extends 'base_generic.html' %}
+{% load static %}
 
 {% block content %}
-<div style="max-width: 600px; margin: 0 auto; text-align: center; padding: 20px; background-color: #ffffff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-top: 20px; border-radius: 8px;">
-    <h2 style="color: #ffffff; background-color: #007cb5; padding: 10px; border-radius: 4px;">Login</h2>
-    <p style="margin-top: 20px; margin-bottom: 20px; color: #333;">Please enter your credentials to login.</p>
-    <form method="post" style="margin-top: 20px;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" style="background-color: #007cb5; color: white; border: none; padding: 10px 20px; margin-top: 10px; border-radius: 4px;">Login</button>
-    </form>
+<div class="login-container">
+    <div class="login-form">
+        <h1>Log in</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Email:</label>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+            <button type="submit" class="login-btn">Log in</button>
+        </form>
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+        <p>By continuing with Email, you agree to Todo List App's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+    </div>
+    <div class="login-image">
+        <img id="welcome-image" src="{% static 'images/welcome.png' %}" alt="Welcome Image">
+    </div>
 </div>
 {% endblock %}

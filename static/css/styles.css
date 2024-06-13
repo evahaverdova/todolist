@@ -1,0 +1,688 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+header, footer {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+header h1, footer p {
+    margin: 0;
+    font-size: 18px;
+    padding-left: 10px;
+}
+
+header nav, footer nav {
+    display: flex;
+    gap: 10px;
+    padding-right: 10px;
+}
+
+header nav a, footer nav a {
+    color: #007CB5;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #007CB5;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header nav a:hover, footer nav a:hover {
+    background-color: #007CB5;
+    color: white;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: flex-start; /* Align items to the top */
+    padding: 20px;
+    width: 100%; /* Full width */
+}
+
+.container {
+    background-color: transparent; /* Make container background transparent */
+    box-shadow: none; /* Remove the box shadow */
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+}
+
+.header {
+    font-size: 25px; /* Zväčšená veľkosť písma pre nadpis */
+    color: #007CB5; /* Apply blue color to text */
+    padding: 20px 0; /* Odstráni padding z bokov */
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 40px;
+    color: #007CB5; /* Apply blue color to text */
+}
+
+.content p {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.buttons button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #007CB5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons button:hover {
+    background-color: #005f87;
+}
+
+#options {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+
+}
+
+#options h2 {
+    font-size: 15px; /* Zmenšená veľkosť písma */
+    margin-bottom: 10px;
+    text-align: left; /* Align text to the left */
+    font-weight: normal; /* Zmenšená hrúbka písma */
+    padding-left: 0px; /* Odsadenie od ľavého okraja */
+}
+
+#button-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+#button-container button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #007CB5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#button-container button:hover {
+    background-color: #005f87;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #007CB5;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.form-header {
+    color: #007CB5;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-actions {
+    text-align: center;
+}
+
+.button {
+    background-color: #007CB5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Task-specific styles */
+.task-container {
+    width: 100%; /* Full width */
+    margin: 0;
+    padding: 20px 0; /* Remove padding from sides */
+    border-radius: 8px;
+}
+
+.task-header {
+    color: #007CB5;
+    font-size: 40px;
+    text-align: left; /* Align to the left */
+    margin: 0;
+}
+
+.create-task {
+    background-color: #00CA00;
+    color: white;
+    font-size: 19px;
+    padding: 5px 10px; /* Zmenšená veľkosť */
+    border-radius: 10px; /* Upravené na 4px */
+    text-decoration: none;
+    margin-right: 100px; /* Pridajte túto riadok na posunutie tlačidla doľava */
+}
+
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to the left */
+    gap: 10px; /* Gap between items */
+}
+
+.task-item {
+    border: 1px solid #007cb5;
+    background-color: #ffffff;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    width: 23%; /* Adjust the width to fit 4 items in a row */
+    box-sizing: border-box;
+    color: #007cb5;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.task-title {
+    font-size: 14px; /* Zmenšená veľkosť písma */
+    color: #00CA00;
+    font-weight: bold;
+    margin-bottom: 0.5px; /* Zmenšené margin-bottom */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.5px; /* Pridajte túto riadok pre zväčšenie medzery medzi písmenami */
+}
+
+.task-description {
+    font-size: 12px; /* Zmenšená veľkosť písma */
+    color: #5e5e5e;
+    font-weight: bold;
+    margin-bottom: 0.5px; /* Zmenšené margin-bottom */
+    flex-grow: 1;
+    overflow-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Zobrazí maximálne 2 riadky */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 5px; /* Vzdialenosť od ostatných prvkov */
+    letter-spacing: 0.5px; /* Pridajte túto riadok pre zväčšenie medzery medzi písmenami */
+}
+
+.due-date {
+    color: #007CB5;
+    font-size: 12px; /* Zmenšená veľkosť písma pre due date */
+    color: #333333; /* Farba textu due date */
+    margin-top: 5px; /* Vzdialenosť od ostatných prvkov */
+}
+
+/* Tlačidlá Complete, Edit a Delete */
+.task-item button {
+    background-color: #007CB5;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.task-item button.complete {
+    background-color: #00CA00;
+}
+
+.task-item button.edit {
+    background-color: #007CB5;
+}
+
+.task-item button.delete {
+    background-color: #FF0000; /* Červené pozadie */
+    color: white; /* Biele písmo */
+    border: none; /* Žiadne ohraničenie */
+    font-weight: bold;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.task-item button:hover {
+    background-color: #005f87;
+}
+
+.task-item button.complete:hover {
+    background-color: #009900;
+}
+
+.task-item button.delete:hover {
+    background-color: #cc0000; /* Tmavší odtieň červenej pri hover */
+    color: white;
+}
+
+.task-item a {
+    color: #007CB5;
+    text-decoration: none;
+    font-size: 14px;
+    border: 1px solid #007CB5;
+    border-radius: 4px;
+    padding: 5px 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.task-item a.edit:hover {
+    background-color: #005f87;
+    color: white;
+}
+
+.task-item a.delete {
+    color: #FF0000;
+    border: 2px solid #FF0000;
+    padding: 5px 10px;
+}
+
+.task-item a.delete:hover {
+    background-color: #cc0000;
+    color: white;
+}
+
+/* Uvítacia sekcia */
+.welcome-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center content horizontally */
+    margin-top: 20px;
+    width: 100%;
+}
+
+.welcome-text {
+    flex: 2;
+    text-align: left;
+}
+
+.welcome-image {
+    flex: 1;
+    text-align: center; /* Center the image within its container */
+    margin-right: 170px; /* Add some margin to push the image slightly to the right */
+}
+
+.welcome-image img {
+    max-width: 600px; /* zmenšime šírku obrázka */
+    height: auto;
+    transition: all 0.3s ease; /* Prechodový efekt pri zmene obrázka */
+
+}
+
+/* Skrytie a zobrazenie prvkov */
+.options-hidden {
+    display: none;
+}
+
+.options-hidden.show-flex {
+    display: flex;
+}
+
+.buttons {
+    margin-top: 20px;
+}
+
+#button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#logo {
+    max-width: 40px; /* Zmenšite podľa potreby */
+    height: auto;
+    margin-right: 10px; /* Pridajte odsadenie doprava, ak je potrebné */
+    margin-left: 10px; /* Odsadenie od ľavého okraja o 20px */
+}
+
+/* Login-specific styles */
+.login-container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    overflow: hidden;
+    margin: 40px auto; /* Center the login container and add margin */
+}
+
+.login-form {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+}
+
+.login-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align the form groups */
+    width: 100%; /* Ensure the form group takes full width */
+}
+
+form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form .form-group input {
+    width: 100%;
+     max-width: 300px; /* Set maximum width for the input fields */
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.login-btn {
+    width: 400px;
+    max-width: 400px; /* Set maximum width for the login button */
+    padding: 10px 40px; /* Upravte padding podľa potreby */
+    background-color: #007cb5;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 0px; /* Add some space above the button */
+
+}
+
+.login-btn:hover {
+    background-color: #005f87;
+}
+
+.login-form a {
+    color: #007CB5;
+    text-decoration: none;
+    display: block;
+    margin-top: 20px;
+}
+
+.login-form p {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 20px;
+}
+
+.login-form p a {
+    color: #007CB5;
+}
+
+.login-image {
+    flex: 1;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Sign Up-specific styles (reuse the same styles as Login) */
+.login-container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    overflow: hidden;
+    margin: 40px auto; /* Center the login container and add margin */
+}
+
+.login-form {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+}
+
+.login-form h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align labels and inputs */
+    width: 100%; /* Ensure the form group takes full width */
+}
+
+form .form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+form .form-group input {
+    width: 100%;
+    max-width: 300px; /* Set maximum width for the input fields */
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+form .login-btn {
+    width: 100%;
+    max-width: 300px; /* Set maximum width for the login button */
+    padding: 10px 20px; /* Adjust padding as needed */
+    background-color: #007cb5;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px; /* Add some space above the button */
+}
+
+form .login-btn:hover {
+    background-color: #005f87;
+}
+
+.login-form .password-requirements {
+    text-align: left;
+    font-size: 14px;
+    color: #666666;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    list-style-type: disc;
+    padding-left: 40px; /* Add some padding to the left for bullets */
+}
+
+.login-form a {
+    color: #007CB5;
+    text-decoration: none;
+    display: block;
+    margin-top: 20px;
+}
+
+.login-form p {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 20px;
+}
+
+.login-form p a {
+    color: #007CB5;
+}
+
+.login-image {
+    flex: 1;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Task filter styles */
+.task-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space between the elements */
+    gap: 20px; /* Add gap between filters and create button */
+    width: 100%;
+}
+
+.task-filters {
+    display: flex;
+    align-items: center; /* Center align the filters vertically */
+    gap: 10px; /* Add gap between filter buttons */
+    margin-left: 20px; /* Add margin to align filters better */
+}
+
+.filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filter-button {
+    background-color: #007CB5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px; /* Smaller padding */
+    cursor: pointer;
+    font-size: 14px; /* Smaller font size */
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    width: 120px; /* Fixed width for 15 characters */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+}
+
+.filter-button:hover {
+    background-color: #005f87;
+}
+
+.new-filter-button {
+    order: 1; /* Ensure New button is always last */
+}
+
+.delete-filter {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: transparent;
+    color: #ff0000;
+    border: none;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 8px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.delete-filter:hover {
+    color: #cc0000;
+}
+
+.new-filter-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.new-filter-input {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    width: 200px; /* Set a width for the input */
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.add-filter-button {
+    background-color: #007CB5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.add-filter-button:hover {
+    background-color: #005f87;
+}
+
+/* Alert box styles */
+.alert-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ffcccc;
+    color: #cc0000;
+    padding: 10px;
+    border: 1px solid #cc0000;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+}
+
+/* Hide and show classes */
+.hidden {
+    display: none;
+}
