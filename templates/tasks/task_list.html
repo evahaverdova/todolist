@@ -19,7 +19,7 @@
                     {% endif %}
                 {% endfor %}
                 <div class="filter-wrapper new-filter-wrapper">
-                    <button id="new-filter-button" onclick="toggleNewFilterForm()" class="filter-button new-filter-button">New</button>
+                    <button id="new-filter-button" class="filter-button new-filter-button">New</button>
                 </div>
             </div>
             <a href="{% url 'task_create' %}?filter={{ current_filter }}" class="create-task">Create new task</a>
@@ -33,7 +33,7 @@
 
     <div class="task-list">
         {% for task in tasks %}
-            <div class="task-item" data-status="{{ task.status.all|join:', ' }}">
+            <div class="task-item" data-status="{{ task.status.all|join:',' }}">
                 <p class="task-title">{{ task.title }}</p>
                 <p class="task-description">{{ task.description }}</p>
                 {% if task.start_time %}
@@ -44,10 +44,10 @@
                         {% csrf_token %}
                         <button type="submit" class="complete-button">Complete</button>
                     </form>
-                    <a href="{% url 'task_edit' task.id %}" class="edit-button">Edit</a>
-                    <form method="post" action="{% url 'task_delete' task.id %}" style="display:inline;">
+                    <a href="{% url 'task_edit' task.id %}" style="color: white; background-color: #007CB5; font-weight: medium; padding: 5px 10px; font-size: 14px; cursor: pointer; text-decoration: none; border-radius: 4px; display: inline-block; border: 2px solid #007CB5;">Edit</a>
+                    <form method="post" action="{% url 'task_delete' task.id %}" style="display:inline">
                         {% csrf_token %}
-                        <button type="submit" class="delete-button">&#128465;</button>
+                        <button type="submit" class="delete-button" style="background-color: #FE3535;">&#128465;</button>
                     </form>
                 </div>
             </div>
@@ -55,50 +55,110 @@
     </div>
 </div>
 
-<div id="alert-box" class="alert-box hidden">Maximum number of filters reached.</div>
+<div id="alert-box" class="alert-box hidden" style="display: none;">Maximum number of filters reached.</div>
 
 <script>
     function toggleNewFilterForm() {
         const form = document.getElementById('new-filter-form');
         form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+        console.log("Toggle new filter form: " + form.style.display);
     }
 
-    function deleteFilter(filterName) {
-        fetch(`/tasks/delete_filter/?name=${filterName}`, { method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}})
-        .then(response => {
-            if (response.ok) {
-                window.location.reload();
-            }
-        });
-    }
-
-    document.getElementById('add-filter-button').addEventListener('click', function() {
+    function addNewFilter() {
         const filterName = document.getElementById('new-filter-name').value;
+        const filterCount = document.querySelectorAll('.filter-wrapper').length; // Počítajte existujúce filtre
+
+        if (filterCount >= 7) { // Skontrolujte, či už nie je 6 filtrov + 1 pre tlačidlo "nový filter"
+            console.log('Maximum number of filters reached.');
+            showAlert('Maximum number of filters reached.');
+            return;
+        }
         if (filterName && filterName.length <= 15) {
             fetch('/tasks/add_filter/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 body: JSON.stringify({ name: filterName })
             }).then(response => response.json()).then(data => {
+                console.log("Response status: " + data.status);
+                console.log("Response data: ", data);
                 if (data.status === 'ok') {
-                    window.location.reload();
+                    location.reload();
                 } else {
                     showAlert('Failed to add filter.');
                 }
+            }).catch(error => {
+                console.error('Error adding filter:', error);
+                showAlert('Failed to add filter.');
             });
+        } else {
+            showAlert('Filter name is invalid or too long.');
         }
-    });
+    }
+
+    function deleteFilter(filterName) {
+        console.log(`Attempting to delete filter: ${filterName}`);
+        fetch(`/tasks/delete_filter/?name=${encodeURIComponent(filterName)}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        }).then(response => response.json()).then(data => {
+            console.log("Response status: " + data.status);
+            if (data.status === 'ok') {
+                console.log(`Filter ${filterName} deleted successfully.`);
+                location.reload();
+            } else {
+                console.log(`Failed to delete filter: ${filterName}`);
+                showAlert('Failed to delete filter.');
+            }
+        }).catch(error => {
+            console.error('Error deleting filter:', error);
+            showAlert('Failed to delete filter.');
+        });
+    }
 
     function showAlert(message) {
+        console.log('Showing alert:', message);
         const alertBox = document.getElementById('alert-box');
         alertBox.innerText = message;
         alertBox.classList.remove('hidden');
+        alertBox.style.display = 'block';
         setTimeout(() => {
             alertBox.classList.add('hidden');
+            alertBox.style.display = 'none';
         }, 3000);
     }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Script loaded");
+
+        document.getElementById('new-filter-button').addEventListener('click', function() {
+            console.log("New button clicked");
+            toggleNewFilterForm();
+        });
+
+        document.getElementById('add-filter-button').addEventListener('click', function() {
+            console.log("Add filter button clicked");
+            addNewFilter();
+        });
+    });
 </script>
 {% endblock %}

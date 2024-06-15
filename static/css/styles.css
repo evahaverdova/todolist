@@ -273,12 +273,13 @@ main {
 
 .task-item button.edit {
     background-color: #007CB5;
+
 }
 
 .task-item button.delete {
     background-color: #FF0000; /* Červené pozadie */
     color: white; /* Biele písmo */
-    border: none; /* Žiadne ohraničenie */
+    border: none; /* Červený rámik */
     font-weight: bold;
     padding: 5px 10px;
     font-size: 14px;
@@ -286,17 +287,18 @@ main {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.task-item button:hover {
-    background-color: #005f87;
+.task-item button.delete:hover {
+    background-color: #cc0000; /* Tmavší odtieň červenej pri hover */
+    color: white;
+    border-color: #cc0000; /* Tmavší odtieň rámika pri hover */
 }
 
 .task-item button.complete:hover {
     background-color: #009900;
 }
 
-.task-item button.delete:hover {
-    background-color: #cc0000; /* Tmavší odtieň červenej pri hover */
-    color: white;
+.task-item button.edit:hover {
+    background-color: #005f87;
 }
 
 .task-item a {

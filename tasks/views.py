@@ -1,5 +1,3 @@
-# tasks/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task, TaskStatus
 from .forms import TaskForm
@@ -16,7 +14,7 @@ def task_list(request):
     else:
         tasks = Task.objects.filter(user=request.user, status__name=current_filter).order_by('start_time')
 
-    available_statuses = TaskStatus.objects.values_list('name', flat=True).distinct()
+    available_statuses = TaskStatus.objects.filter(user=request.user).values_list('name', flat=True).distinct()
 
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
@@ -34,11 +32,14 @@ def task_create(request):
             task.user = request.user
             task.save()
 
-            all_status, created = TaskStatus.objects.get_or_create(name='all')
+            # Vždy pridaj do stavu 'all'
+            all_status, created = TaskStatus.objects.get_or_create(name='all', user=request.user)
             task.status.add(all_status)
 
-            if current_filter != 'all':
-                custom_status, created = TaskStatus.objects.get_or_create(name=current_filter)
+            # Pridaj do vybraného filtra
+            selected_filter = request.POST.get('filter')
+            if selected_filter and selected_filter != 'all':
+                custom_status, created = TaskStatus.objects.get_or_create(name=selected_filter, user=request.user)
                 task.status.add(custom_status)
 
             task.save()
@@ -46,7 +47,7 @@ def task_create(request):
     else:
         form = TaskForm()
 
-    available_statuses = TaskStatus.objects.values_list('name', flat=True).distinct()
+    available_statuses = TaskStatus.objects.filter(user=request.user).values_list('name', flat=True).distinct()
     return render(request, 'tasks/task_form.html', {
         'form': form,
         'current_filter': current_filter,
@@ -59,7 +60,7 @@ def add_filter(request):
         data = json.loads(request.body)
         filter_name = data.get('name')
         if filter_name:
-            TaskStatus.objects.get_or_create(name=filter_name)
+            TaskStatus.objects.get_or_create(name=filter_name, user=request.user)
             return JsonResponse({'status': 'ok'})
     return JsonResponse({'status': 'error'})
 
@@ -68,10 +69,14 @@ def delete_filter(request):
     if request.method == 'POST':
         filter_name = request.GET.get('name')
         if filter_name:
-            status = get_object_or_404(TaskStatus, name=filter_name)
-            status.delete()
-            return JsonResponse({'status': 'ok'})
+            try:
+                status = get_object_or_404(TaskStatus, name=filter_name, user=request.user)
+                status.delete()
+                return JsonResponse({'status': 'ok'})
+            except TaskStatus.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Filter not found'})
     return JsonResponse({'status': 'error'})
+
 
 @login_required
 def task_complete(request, task_id):
@@ -83,6 +88,7 @@ def task_complete(request, task_id):
 @login_required
 def task_edit(request, task_id):
     task = get_object_or_404(Task, id=task_id, user=request.user)
+    current_filter = request.GET.get('filter', 'all')  # Definícia current_filter
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
@@ -95,7 +101,7 @@ def task_edit(request, task_id):
     else:
         form = TaskForm(instance=task)
 
-    available_statuses = TaskStatus.objects.values_list('name', flat=True).distinct()
+    available_statuses = TaskStatus.objects.filter(user=request.user).values_list('name', flat=True).distinct()
     return render(request, 'tasks/task_form.html', {
         'form': form,
         'task': task,
@@ -112,3 +118,5 @@ def task_delete(request, task_id):
 
 def index(request):
     return render(request, 'index.html')
+
+
