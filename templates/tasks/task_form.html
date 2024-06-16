@@ -26,9 +26,12 @@
             <div class="form-group">
                 <label for="filter">Filter:</label>
                 <select name="filter" id="filter">
+                    <!-- Pevne definovaný filter "All" -->
                     <option value="all">All</option>
                     {% for filter in available_statuses %}
+                      {% if filter != 'all' %}
                         <option value="{{ filter }}" {% if current_filter == filter %}selected{% endif %}>{{ filter }}</option>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </div>

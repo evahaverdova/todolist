@@ -28,10 +28,21 @@
             <button type="submit" class="login-btn">Sign Up</button>
         </form>
         <a href="{% url 'login' %}">Already have an account? Log in</a>
-        <p>By signing up with Email, you agree to Todo List App's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+        <p>By signing up with Email, you agree to Todo List App's</p>
     </div>
     <div class="login-image">
         <img id="welcome-image" src="{% static 'images/welcome.png' %}" alt="Welcome Image">
     </div>
 </div>
+
+<div id="alert-box" class="alert-box hidden" style="display: none;">Please enter a valid password.</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if form.errors %}
+            const alertBox = document.getElementById('alert-box');
+            alertBox.style.display = 'block';
+        {% endif %}
+    });
+</script>
 {% endblock %}
