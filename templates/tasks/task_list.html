@@ -13,7 +13,7 @@
                 {% for filter in available_statuses %}
                     {% if filter != 'all' %}
                         <div class="filter-wrapper">
-                            <button onclick="window.location.href='?filter={{ filter }}'" class="filter-button {% if current_filter == filter %}active{% endif %}">{{ filter }}</button>
+                            <button id="filter-{{ filter|slugify }}" onclick="window.location.href='?filter={{ filter }}'" class="filter-button {% if current_filter == filter %}active{% endif %}">{{ filter }}</button>
                             <span class="delete-filter" onclick="deleteFilter('{{ filter }}')">✖</span>
                         </div>
                     {% endif %}
@@ -47,7 +47,7 @@
                     <a href="{% url 'task_edit' task.id %}" style="color: white; background-color: #007CB5; font-weight: medium; padding: 5px 10px; font-size: 14px; cursor: pointer; text-decoration: none; border-radius: 4px; display: inline-block; border: 2px solid #007CB5;">Edit</a>
                     <form method="post" action="{% url 'task_delete' task.id %}" style="display:inline">
                         {% csrf_token %}
-                        <button type="submit" class="delete-button" style="background-color: #FE3535;">&#128465;</button>
+                        <button type="button" class="delete-button" style="background-color: #FE3535;" onclick="confirmDelete('{{ task.id }}')">&#128465;</button>
                     </form>
                 </div>
             </div>
@@ -55,9 +55,37 @@
     </div>
 </div>
 
+<div id="confirm-dialog" class="confirm-dialog hidden">
+    <p>Are you sure you want to delete this task?</p>
+    <button id="confirm-yes">Yes</button>
+    <button id="confirm-no">No</button>
+</div>
+
+
 <div id="alert-box" class="alert-box hidden" style="display: none;">Maximum number of filters reached.</div>
 
 <script>
+
+    let taskIdToDelete = null;
+
+function confirmDelete(taskId) {
+    taskIdToDelete = taskId;
+    document.getElementById('confirm-dialog').classList.remove('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('confirm-yes').addEventListener('click', function() {
+        if (taskIdToDelete) {
+            document.querySelector(`form[action$="/${taskIdToDelete}/"]`).submit();
+        }
+    });
+
+    document.getElementById('confirm-no').addEventListener('click', function() {
+        document.getElementById('confirm-dialog').classList.add('hidden');
+        taskIdToDelete = null;
+    });
+});
+
     function toggleNewFilterForm() {
         const form = document.getElementById('new-filter-form');
         form.style.display = form.style.display === 'none' ? 'flex' : 'none';

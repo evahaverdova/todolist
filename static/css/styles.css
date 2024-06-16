@@ -611,6 +611,12 @@ form .login-btn:hover {
     background-color: #005f87;
 }
 
+.filter-button.active {
+    background-color: #02486e;
+    font-weight: bold;
+    border: 2px solid #02486e;
+}
+
 .new-filter-button {
     order: 1; /* Ensure New button is always last */
 }
@@ -687,4 +693,36 @@ form .login-btn:hover {
 /* Hide and show classes */
 .hidden {
     display: none;
+}
+
+/* Confirm Dialog styles */
+.confirm-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.confirm-dialog p {
+    margin: 0 0 10px 0;
+}
+
+.confirm-dialog button {
+    background-color: white;
+    color: red;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.confirm-dialog button:hover {
+    background-color: lightgray;
 }
