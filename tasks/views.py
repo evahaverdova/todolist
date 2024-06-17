@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.utils.timezone import now  # kontrola casu
 
 @login_required
 def task_list(request):
@@ -19,7 +20,8 @@ def task_list(request):
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
         'current_filter': current_filter,
-        'available_statuses': available_statuses
+        'available_statuses': available_statuses,
+        'now': now()  # aktuálny čas kontextu
     })
 
 @login_required

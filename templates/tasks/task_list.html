@@ -37,7 +37,11 @@
                 <p class="task-title">{{ task.title }}</p>
                 <p class="task-description">{{ task.description }}</p>
                 {% if task.start_time %}
-                    <p class="due-date"><strong>Start time:</strong> {{ task.start_time }}</p>
+                    {% if task.status != 'completed' and task.start_time < now %}
+                        <p class="due-date" style="color: red;"><strong>Start time:</strong> {{ task.start_time }}</p>
+                    {% else %}
+                        <p class="due-date"><strong>Start time:</strong> {{ task.start_time }}</p>
+                    {% endif %}
                 {% endif %}
                 <div class="task-actions">
                     <form method="post" action="{% url 'task_complete' task.id %}" style="display:inline;">
